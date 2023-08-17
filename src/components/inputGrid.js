@@ -1,11 +1,14 @@
 import React, { useState, useRef } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 
-const InputGrid = ({ size, feedback, onChange }) => {
+const InputGrid = ({ size, feedback, onChange, disabled }) => {
   const [inputs, setInputs] = useState(Array(size).fill(''));
   const inputRefs = Array.from({ length: size }, () => useRef());
 
   const handleInputChange = (index, value) => {
+    if (disabled) {
+        return;
+    }
     const newInputs = [...inputs];
     newInputs[index] = value;
     setInputs(newInputs);
@@ -32,6 +35,7 @@ const InputGrid = ({ size, feedback, onChange }) => {
           ref={inputRefs[index]}
           // Focuses on the first input
           autoFocus={index === 0}
+          editable={!disabled}
         />
       ))}
     </View>
