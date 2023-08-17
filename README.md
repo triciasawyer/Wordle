@@ -1,4 +1,4 @@
-# Wordle remake!
+# Wordle remake
 
 ## Tricia Sawyer
 
