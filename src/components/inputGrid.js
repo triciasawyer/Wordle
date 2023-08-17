@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 
-const InputGrid = ({ size, onChange }) => {
+const InputGrid = ({ size, feedback, onChange }) => {
   const [inputs, setInputs] = useState(Array(size).fill(''));
   const inputRefs = Array.from({ length: size }, () => useRef());
 
@@ -21,7 +21,11 @@ const InputGrid = ({ size, onChange }) => {
       {inputs.map((input, index) => (
         <TextInput
           key={index}
-          style={styles.gridInput}
+          style={[
+            styles.gridInput,
+            feedback[index] && feedback[index].correct && styles.correctInput,
+            feedback[index] && !feedback[index].correct && styles.incorrectInput,
+          ]}
           value={input}
           onChangeText={(text) => handleInputChange(index, text)}
           maxLength={1}
@@ -47,6 +51,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     margin: 5,
+  },
+  correctInput: {
+    backgroundColor: 'green',
+  },
+  incorrectInput: {
+    backgroundColor: 'yellow',
   },
 });
 
