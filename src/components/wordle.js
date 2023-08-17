@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import InputGrid from './inputGrid';
 
 const Wordle = () => {
@@ -12,22 +12,24 @@ const Wordle = () => {
     generateTargetWord();
   }, []);
 
+  useEffect(() => {
+    if (guess.length === targetWord.length) {
+      if (guess.toUpperCase() === targetWord) {
+        setFeedback(['correct']);
+        setAttempts(attempts + 1);
+        generateTargetWord();
+        setGuess('');
+      } else {
+        setFeedback(['incorrect']);
+      }
+    }
+  }, [guess]);
+
   const generateTargetWord = () => {
     const words = ['APPLE', 'TABLE', 'CHAIR', 'PHONE', 'HOUSE', 'BEACH', 'CLOUD', 'TIGER', 'RIVER', 'PIZZA'];
     
     const randomWord = Math.floor(Math.random() * words.length);
     setTargetWord(words[randomWord]);
-  };
-
-  const handleGuess = () => {
-    if (guess.toUpperCase() === targetWord) {
-      setFeedback(['You guessed the word!']);
-      setAttempts(attempts + 1);
-      generateTargetWord();
-      setGuess('');
-    } else {
-      // ...
-    }
   };
 
   return (
@@ -36,13 +38,17 @@ const Wordle = () => {
       <Text>Attempts: {attempts}</Text>
       <View style={styles.feedbackContainer}>
         {feedback.map((fb, index) => (
-          <Text key={index} style={styles.feedback}>
-            {fb}
-          </Text>
+          <View
+          key={index}
+          style={[
+            styles.feedbackBox,
+            fb === 'correct' && styles.feedbackBoxCorrect,
+            fb === 'incorrect' && styles.feedbackBoxIncorrect,
+          ]}
+          />
         ))}
       </View>
       <InputGrid size={5} onChange={(text) => setGuess(text)} />
-      <Button title="Guess" onPress={handleGuess} />
     </View>
   );
 };
@@ -62,16 +68,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10,
   },
-  feedback: {
-    fontSize: 20,
-    marginRight: 10,
-  },
-  input: {
+  feedbackBox: {
+    width: 20,
+    height: 20,
+    margin: 5,
     borderWidth: 1,
-    borderColor: 'gray',
-    width: 200,
-    padding: 10,
-    marginVertical: 10,
+    borderColor: 'black',
+  },
+  feedbackCorrect: {
+    backgroundColor: 'green',
+  },
+  feedbackIncorrect: {
+    backgroundColor: 'red',
   },
 });
 

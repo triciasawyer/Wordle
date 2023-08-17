@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 
 const InputGrid = ({ size, onChange }) => {
   const [inputs, setInputs] = useState(Array(size).fill(''));
+  const inputRefs = Array.from({ length: size }, () => useRef());
 
   const handleInputChange = (index, value) => {
     const newInputs = [...inputs];
     newInputs[index] = value;
     setInputs(newInputs);
     onChange(newInputs.join(''));
+
+    if (index < size - 1 && value !== '') {
+        inputRefs[index + 1].current.focus();
+      }
   };
 
   return (
@@ -20,6 +25,9 @@ const InputGrid = ({ size, onChange }) => {
           value={input}
           onChangeText={(text) => handleInputChange(index, text)}
           maxLength={1}
+          ref={inputRefs[index]}
+          // Focuses on the first input
+          autoFocus={index === 0}
         />
       ))}
     </View>
