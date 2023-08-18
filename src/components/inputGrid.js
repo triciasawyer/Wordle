@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 
-const InputGrid = ({ size, feedback, onChange, disabled }) => {
+const InputGrid = ({ size, feedback, onChange, setFeedback, disabled, targetWord }) => {
   const [inputs, setInputs] = useState(Array(size * size).fill(''));
   const inputRefs = Array.from({ length: size * size }, () => useRef());
 
@@ -29,6 +29,15 @@ const InputGrid = ({ size, feedback, onChange, disabled }) => {
           inputRefs[index + size].current.focus();
         }
       }
+
+      const newFeedback = targetWord.split('').map((letter, i) => ({
+        letter,
+        correct:
+          newInputs[i] === letter.toUpperCase() ||
+          (feedback[i] && feedback[i].correct) ||
+          letter.toUpperCase() === value.toUpperCase(),
+      }));
+      setFeedback(newFeedback);
     }
   };
 

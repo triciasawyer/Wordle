@@ -58,7 +58,14 @@ const Wordle = () => {
             <Text style={styles.title}>Wordle</Text>
             <Text>Attempts: {attempts + 1}/{maxAttempts}</Text>
             <View style={styles.inputContainer}>
-                <InputGrid size={5} feedback={feedback} onChange={(text) => setGuess(text)} disabled={completed} />
+                <InputGrid
+                    size={5}
+                    feedback={feedback}
+                    onChange={(text) => setGuess(text)}
+                    setFeedback={setFeedback}
+                    disabled={completed}
+                    targetWord={targetWord}
+                />
             </View>
             {completed && (
                 <View style={styles.buttonContainer}>
