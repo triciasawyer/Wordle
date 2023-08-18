@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 import InputGrid from './inputGrid';
 
 const Wordle = () => {
     const [targetWord, setTargetWord] = useState('');
     const [guess, setGuess] = useState('');
-    const [attempts, setAttempts] = useState(0);
     const [feedback, setFeedback] = useState([]);
+    const [attempts, setAttempts] = useState(0);
     const [completed, setCompleted] = useState(false);
     const maxAttempts = 5;
 
@@ -23,10 +23,8 @@ const Wordle = () => {
                 ]);
                 setGuess('');
 
-                if (attempts === maxAttempts - 1) {
+                if (completed || attempts + 1 === maxAttempts) {
                     setCompleted(true);
-                } else {
-                    setAttempts(attempts + 1);
                 }
             } else {
                 const newFeedback = guess.split('').map((letter, index) => ({
@@ -35,7 +33,7 @@ const Wordle = () => {
                 }));
                 setFeedback((prevFeedback) => [...prevFeedback, newFeedback]);
 
-                if (attempts === maxAttempts - 1) {
+                if (completed || attempts + 1 === maxAttempts) {
                     setCompleted(true);
                 }
             }
@@ -56,7 +54,6 @@ const Wordle = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Wordle</Text>
-            <Text>Attempts: {attempts + 1}/{maxAttempts}</Text>
             <View style={styles.inputContainer}>
                 <InputGrid
                     size={5}
